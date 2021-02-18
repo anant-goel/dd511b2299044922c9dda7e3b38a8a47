@@ -1,13 +1,15 @@
-## How to add the blur effects on MiuiSystemUI.apk?
+## How to bring back the blur effects of MIUI 12 on low-end devices
 
-If you have a low-end device, you probably noticed the gray background color on your control center and notification shade. Let's bring back the glorious blur effect.
+If you have a low-end device, you probably noticed the gray background color on your control center and notification shade. Let's bring back the glorious blur effect by patching `MiuiSystemUI.apk`.
 
-Pre-requisites:
+Prerequisites:
 
 + `adb`
 + `smali/baksmali`
 + `zip`
++ `Code/Text Editor`
 + `A tool to decompile an apk file`
++ `Custom Recovery Installed`
 + `Common knowledge. I'm not responsible if you bricked your device or caused a thermonuclear war. ;)`
 
 ### Prepare the tools needed.
@@ -20,12 +22,12 @@ Install the tools required for this operation. Use your favorite distro's packag
 $ adb pull /system/priv-app/MiuiSystemUI/MiuiSystemUI.apk .
 ```
 
-The command above will copy the apk file to $PWD. It's recommended to create a backup. We will be overwriting it later.
+The command above will copy the apk file to the current directory. It's recommended to create a backup. We will be overwriting it later.
 
 
 ### Decompile or Extract the APK
 
-Decompile the APK with your favorite tool. I will use `MT Manager`, an android application, for this. The extracted files and folders should be:
+Decompile the APK with your favorite tool. I will use `MT Manager`, an android application, for this. Go to the extracted folder. It should contain:
 
 	+ assets/
 	+ kotlin/
@@ -35,10 +37,7 @@ Decompile the APK with your favorite tool. I will use `MT Manager`, an android a
 	+ classes.dex
 	+ resources.arsc
 
-Go to the extracted folder.
-
 ### Disassemble classes.dex
-
 
 Disassemble it by:
 
@@ -187,7 +186,10 @@ $ zip -r MiuiSystemUI.apk assets/ kotlin/ META-INF/ res/ AndroidManifest.xml cla
 
 ### Push the new MiuiSystemUI.apk
 
-Go to your custom recovery, mount `/system`, then push the modified MiuiSystemUI.apk.
+Go to your custom recovery, mount `/system`, then push the modified MiuiSystemUI.apk. Note that if you're rooted with Magisk, you can create a magisk module instead.
+
+This will overwrite the default or stock MiuiSystemUI.apk so make sure you made a backup before doing this.
+
 
 ```
 $ adb push MiuiSystemUI.apk /system/priv-app/MiuiSystemUI/
@@ -197,6 +199,6 @@ $ adb push MiuiSystemUI.apk /system/priv-app/MiuiSystemUI/
 
 Reboot.
 
-### Extras
+### Notes
 
-You can also make a magisk module with this! Tried and tested it myself. Sadly, I only use China-rom and didn't want to maintain a module for the other variants. So yeah.
+Your warranty is now void. I'm not responsible if you bricked your device. You are choosing to make this modifications.
