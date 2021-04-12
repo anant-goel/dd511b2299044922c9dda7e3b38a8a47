@@ -1,5 +1,3 @@
--c/--copy-original has been deprecated. Removal planned for v2.6.0 (#2129)
-
 ## How to bring back the blur effects of MIUI 12 on low-end devices
 
 If you have a low-end device, you probably noticed the gray background color on your control center and notification shade. Let's bring back the glorious blur effect by patching `MiuiSystemUI.apk`.
