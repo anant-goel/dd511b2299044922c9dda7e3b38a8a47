@@ -1,3 +1,5 @@
+-c/--copy-original has been deprecated. Removal planned for v2.6.0 (#2129)
+
 ## How to bring back the blur effects of MIUI 12 on low-end devices
 
 If you have a low-end device, you probably noticed the gray background color on your control center and notification shade. Let's bring back the glorious blur effect by patching `MiuiSystemUI.apk`.
@@ -5,10 +7,9 @@ If you have a low-end device, you probably noticed the gray background color on 
 Prerequisites:
 
 + `adb`
++ `apktool < v2.6.0`
 + `smali/baksmali`
-+ `zip`
 + `Code/Text Editor`
-+ `A tool to decompile an apk file`
 + `Custom Recovery Installed`
 + `Common knowledge. I'm not responsible if you bricked your device or caused a thermonuclear war. ;)`
 
@@ -27,27 +28,24 @@ The command above will copy the apk file to the current directory. It's recommen
 
 ### Decompile or Extract the APK
 
-Decompile the APK with your favorite tool. I will use `MT Manager`, an android application, for this. Go to the extracted folder. It should contain:
+Decompile the APK with `apktool`.
+
+```bash
+$ apktool d -r  MiuiSystemUI.apk
+```
+
+The command should decompile the apk file and create a folder named `MiuiSystemUI`. Go to the extracted folder. It should contain:
 
 	+ assets/
 	+ kotlin/
-	+ META-INF/
+	+ original/
 	+ res/
+	+ smali/
 	+ AndroidManifest.xml 
-	+ classes.dex
+	+ apktool.yml
 	+ resources.arsc
 
-### Disassemble classes.dex
-
-Disassemble it by:
-
-```
-$ baksmali d classes.dex
-```
-
-This command should create the `out/` folder. It will contain all the `.smali` files extracted from `classes.dex`.
-
-Go inside the `out/` folder.
+Go inside the `smali/` folder.
 
 ### Editing .smali files to enable blur
 
@@ -166,38 +164,36 @@ This is the important part. There are two files we need to edit. The `ControlPan
 
 6. Save it.
 
-### Assemble .smali files back to classes.dex
-
-Inside `out/` folder. Execute the command below to assemble all smali files back to classes.dex
-
-```
-$ smali a . -o classes.dex
-```
-
-This should create a new `classes.dex` on the current directory.
-
 ### Build a new MiuiSystemUI.apk
 
-Move or copy the compiled `classes.dex` to the extracted `MiuiSystemUI.apk`. This should replace the old one. Then delete the `out/` folder. We don't need it anymore. Create a new MiuiSystemUI.apk by:
+Go back to the `MiuiSystemUI` folder, then use `apktool < v2.6.0` to rebuild the files back to apk file:
 
+```bash
+$ apktool b -fc .
 ```
-$ zip -r MiuiSystemUI.apk assets/ kotlin/ META-INF/ res/ AndroidManifest.xml classes.dex resources.arsc
-```
 
-### Push the new MiuiSystemUI.apk
+The new `MiuiSystemUI.apk` is now created and can be located inside `dist/` folder.
 
-Go to your custom recovery, mount `/system`, then push the modified MiuiSystemUI.apk. Note that if you're rooted with Magisk, you can create a magisk module instead.
+### Enable blur on MIUI 12
 
-This will overwrite the default or stock MiuiSystemUI.apk so make sure you made a backup before doing this.
+With the `MiuiSystemUI.apk` in hand, you can now bring back the blur on your device. There are two methods here:
 
+1. Create a magisk module.
+2. Replace the stock `MiuiSystemUI.apk` file with the modified one.
 
-```
+It's recommended to just use a magisk module, so you can replace the MiuiSystemUI.apk systemlessly. Although creating magisk module is not included in this guide, we'll just use the second method.
+
+Go to your custom recovery, mount `/system`, then push the modified `MiuiSystemUI.apk` to `/system/priv-app/MiuiSystemUI/`.
+
+```bash
 $ adb push MiuiSystemUI.apk /system/priv-app/MiuiSystemUI/
 ```
 
+This will overwrite the stock MiuiSystemUI.apk so make sure you made a backup before doing this.
+
 ### Finish!
 
-Reboot.
+Reboot to system.
 
 ### Notes
 
