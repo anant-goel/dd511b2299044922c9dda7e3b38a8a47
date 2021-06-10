@@ -179,7 +179,7 @@ With the `MiuiSystemUI.apk` in hand, you can now bring back the blur on your dev
 1. Create a magisk module.
 2. Replace the stock `MiuiSystemUI.apk` file with the modified one.
 
-It's recommended to just use a magisk module, so you can replace the MiuiSystemUI.apk systemlessly. Although creating magisk module is not included in this guide, we'll just use the second method.
+It's recommended to just use a magisk module, so you can replace the MiuiSystemUI.apk systemlessly. Creating magisk module is not included in this guide, we'll just use the second method.
 
 Go to your custom recovery, mount `/system`, then push the modified `MiuiSystemUI.apk` to `/system/priv-app/MiuiSystemUI/`.
 
