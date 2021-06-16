@@ -47,10 +47,10 @@ Go inside the `smali/` folder.
 
 ### Editing .smali files to enable blur
 
-This is the important part. There are two files we need to edit. The `ControlPanelWindowManager.smali` that will enable the blur on the control center and `StatusBarWindowManager.smali` that will enable the blur on the notification shade.
+This is the most important part. `ControlPanelWindowManager.smali` and `StatusBarWindowManager.smali` are the files that we need to edit to enable the blur effects on the control center and notification shade, respectively.
 
 1. Open `com/android/systemui/miui/statusbar/phone/ControlPanelWindowManager.smali` with your favorite text editor.
-2. Find the `applyBlurRatio()` method. It should be on line 101 to 148 (could be different on your device). Then change the whole function to:
+2. Find the `applyBlurRatio()` method. It should be on line 101 to 148 (might be different in your device). Then change the whole function to:
 
 ```smali
 .method private applyBlurRatio(F)V
@@ -107,7 +107,7 @@ This is the important part. There are two files we need to edit. The `ControlPan
 
 4. Open `com/android/systemui/statusbar/phone/StatusBarWindowManager.smali` with your favorite text editor.
 
-5. Find the `applyBlurRatio()` method. It should be on line 294 to 341. Then change the whole function to:
+5. Find the `applyBlurRatio()` method. It should be on line 294 to 341 (again, it might be different in your device). Then change the whole function to:
 
 ```smali
 .method private applyBlurRatio(Lcom/android/systemui/statusbar/phone/StatusBarWindowManager$State;)V
@@ -164,30 +164,28 @@ This is the important part. There are two files we need to edit. The `ControlPan
 
 ### Build a new MiuiSystemUI.apk
 
-Go back to the `MiuiSystemUI` folder, then use `apktool < v2.6.0` to rebuild the files back to apk file:
+Go back to the `MiuiSystemUI` folder, then use `apktool < v2.6.0` to rebuild the decompiled files back to `.apk` file:
 
 ```bash
 $ apktool b -fc .
 ```
 
-The new `MiuiSystemUI.apk` is now created and can be located inside `dist/` folder.
+The new `MiuiSystemUI.apk` is now created and can be located inside the newly created `dist/` folder.
 
 ### Enable blur on MIUI 12
 
-With the `MiuiSystemUI.apk` in hand, you can now bring back the blur on your device. There are two methods here:
+We're almost done! With the modified `MiuiSystemUI.apk` in hand, you can now bring back the blur on your device. There are two methods here:
 
 1. Create a magisk module.
 2. Replace the stock `MiuiSystemUI.apk` file with the modified one.
 
-It's recommended to just use a magisk module, so you can replace the MiuiSystemUI.apk systemlessly. Creating magisk module is not included in this guide, we'll just use the second method.
+It's recommended to just use a magisk module, so you can replace the MiuiSystemUI.apk systemlessly. Creating a magisk module is not included in this guide, we'll just use the second method.
 
-Go to your custom recovery, mount `/system`, then push the modified `MiuiSystemUI.apk` to `/system/priv-app/MiuiSystemUI/`.
+Go to your custom recovery, mount `/system`, then push the modified `MiuiSystemUI.apk` to `/system/priv-app/MiuiSystemUI/`. This will overwrite the stock MiuiSystemUI.apk, so make sure that you made a backup before doing this.
 
 ```bash
 $ adb push MiuiSystemUI.apk /system/priv-app/MiuiSystemUI/
 ```
-
-This will overwrite the stock MiuiSystemUI.apk so make sure you made a backup before doing this.
 
 ### Finish!
 
